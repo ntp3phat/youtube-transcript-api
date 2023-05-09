@@ -15,11 +15,13 @@ def get_long_description():
 
 def get_test_suite():
     test_loader = unittest.TestLoader()
-    test_suite = test_loader.discover(
-        'test', pattern='test_*.py',
-        top_level_dir='{dirname}/youtube_transcript_api'.format(dirname=os.path.dirname(__file__))
+    return test_loader.discover(
+        'test',
+        pattern='test_*.py',
+        top_level_dir='{dirname}/youtube_transcript_api'.format(
+            dirname=os.path.dirname(__file__)
+        ),
     )
-    return test_suite
 
 
 setuptools.setup(
