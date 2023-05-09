@@ -143,7 +143,7 @@ class SRTFormatter(_TextBasedFormatter):
         return "\n\n".join(lines) + "\n"
 
     def _format_transcript_helper(self, i, time_text, line):
-        return "{}\n{}\n{}".format(i + 1, time_text, line['text'])
+        return f"{i + 1}\n{time_text}\n{line['text']}"
 
 
 class WebVTTFormatter(_TextBasedFormatter):
@@ -154,7 +154,7 @@ class WebVTTFormatter(_TextBasedFormatter):
         return "WEBVTT\n\n" + "\n\n".join(lines) + "\n"
 
     def _format_transcript_helper(self, i, time_text, line):
-        return "{}\n{}".format(time_text, line['text'])
+        return f"{time_text}\n{line['text']}"
 
 
 class FormatterLoader(object):

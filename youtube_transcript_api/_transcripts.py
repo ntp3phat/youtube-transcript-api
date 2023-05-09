@@ -76,15 +76,17 @@ class TranscriptListFetcher(object):
         match = re.search('name="v" value="(.*?)"', html)
         if match is None:
             raise FailedToCreateConsentCookie(video_id)
-        self._http_client.cookies.set('CONSENT', 'YES+' + match.group(1), domain='.youtube.com')
+        self._http_client.cookies.set(
+            'CONSENT', f'YES+{match[1]}', domain='.youtube.com'
+        )
 
     def _fetch_video_html(self, video_id):
         html = self._fetch_html(video_id)
         if 'action="https://consent.youtube.com/s"' in html:
             self._create_consent_cookie(html, video_id)
             html = self._fetch_html(video_id)
-            if 'action="https://consent.youtube.com/s"' in html:
-                raise FailedToCreateConsentCookie(video_id)
+        if 'action="https://consent.youtube.com/s"' in html:
+            raise FailedToCreateConsentCookie(video_id)
         return html
 
     def _fetch_html(self, video_id):
@@ -343,10 +345,9 @@ class _TranscriptParser(object):
         if preserve_formatting:
             formats_regex = '|'.join(self._FORMATTING_TAGS)
             formats_regex = r'<\/?(?!\/?(' + formats_regex + r')\b).*?\b>'
-            html_regex = re.compile(formats_regex, re.IGNORECASE)
+            return re.compile(formats_regex, re.IGNORECASE)
         else:
-            html_regex = re.compile(r'<[^>]*>', re.IGNORECASE)
-        return html_regex
+            return re.compile(r'<[^>]*>', re.IGNORECASE)
 
     def parse(self, plain_data):
         return [

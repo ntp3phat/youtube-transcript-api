@@ -79,7 +79,9 @@ class TestYouTubeTranscriptApi(TestCase):
 
         language_codes = {transcript.language_code for transcript in transcript_list}
 
-        self.assertEqual(language_codes, {'zh', 'de', 'en', 'hi', 'ja', 'ko', 'es', 'cs', 'en'})
+        self.assertEqual(
+            language_codes, {'zh', 'de', 'hi', 'ja', 'ko', 'es', 'cs', 'en'}
+        )
 
     def test_list_transcripts__find_manually_created(self):
         transcript_list = YouTubeTranscriptApi.list_transcripts('GJLlxj_dtq8')
@@ -266,7 +268,7 @@ class TestYouTubeTranscriptApi(TestCase):
     
     def test_get_transcript__with_cookies(self):
         dirname, filename = os.path.split(os.path.abspath(__file__))
-        cookies = dirname + '/example_cookies.txt'
+        cookies = f'{dirname}/example_cookies.txt'
         transcript = YouTubeTranscriptApi.get_transcript('GJLlxj_dtq8', cookies=cookies)
 
         self.assertEqual(
@@ -327,7 +329,7 @@ class TestYouTubeTranscriptApi(TestCase):
 
     def test_load_cookies(self):
         dirname, filename = os.path.split(os.path.abspath(__file__))
-        cookies = dirname + '/example_cookies.txt'
+        cookies = f'{dirname}/example_cookies.txt'
         session_cookies = YouTubeTranscriptApi._load_cookies(cookies, 'GJLlxj_dtq8')
         self.assertEqual({'TEST_FIELD': 'TEST_VALUE'},  requests.utils.dict_from_cookiejar(session_cookies))
 
@@ -338,6 +340,6 @@ class TestYouTubeTranscriptApi(TestCase):
 
     def test_load_cookies__no_valid_cookies(self):
         dirname, filename = os.path.split(os.path.abspath(__file__))
-        expired_cookies = dirname + '/expired_example_cookies.txt'
+        expired_cookies = f'{dirname}/expired_example_cookies.txt'
         with self.assertRaises(CookiesInvalid):
             YouTubeTranscriptApi._load_cookies(expired_cookies, 'GJLlxj_dtq8')
